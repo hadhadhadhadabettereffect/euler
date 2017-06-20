@@ -14,6 +14,9 @@ project euler problems <https://projecteuler.net>. feel free to clone if the pro
 * include "problem.h" and create a Problem instance:
     - `Problem <i>name</i>(<i>problem_number</i>, <i>answer_function</i>)`
 
-## timing
-* execution time measured in microseconds. Units can be changed in include/timer.h
-* times recorded in times.txt
+## timer options
+* options at top of `include/timer.h`
+* current settings:
+    - output file name: "times.txt"
+    - measure time in: nanoseconds
+    - # of times to average for a result: 32

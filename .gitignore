@@ -1,2 +1,4 @@
 build/
 include/active_problems.h
+include/*.txt
+sketches
