@@ -1,7 +1,7 @@
 #ifndef PROBLEM_21
 #define PROBLEM_21
 #include "problem.h"
-#include <stack>
+#include "shared.h"
 
 /************************
 Let d(n) be defined as the sum of proper divisors of n
@@ -18,31 +18,14 @@ Evaluate the sum of all the amicable numbers under 10000.
 
 namespace problem_21 {
 
-    std::stack<int> divs;
-
-    int sum_of_divs ( int n )
-    {
-        // 1 always a divisor
-        auto sum = 1;
-        for ( auto i = 2, j = n/2; i <= j; ++i )
-            if ( n % i == 0 ) divs.push(i);
-
-        while ( !divs.empty() )
-        {
-            sum += divs.top();
-            divs.pop();
-        }
-        return sum;
-    }
-
     int solve ()
     {
         auto total = 0;
         for ( auto a = 2, b = 0; a < 10000; ++a )
         {
-            b = sum_of_divs(a);
+            b = shared::sum_of_divisors(a);
             // if a > b then the pair was already recorded
-            if ( a < b && sum_of_divs(b) == a ) total += a + b;
+            if ( a < b && shared::sum_of_divisors(b) == a ) total += a + b;
         }
         return total;
     }
