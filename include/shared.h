@@ -1,24 +1,45 @@
 #ifndef SHARED_H
 #define SHARED_H
-#include <stack>
 
 namespace shared {
 
-    std::stack<int> divs;
-
-    int sum_of_divisors ( int n )
+    // based on https://oeis.org/wiki/Sum_of_divisors_function
+    int sum_of_factors ( int n )
     {
-        // 1 always a divisor
-        auto sum = 1;
-        for ( auto i = 2, j = n/2; i <= j; ++i )
-            if ( n % i == 0 ) divs.push(i);
+        int total = 1;
+        int factor = 1;
+        int p = 0; // value of current power of factor
+        int sum = 1; // sum of powers of factor
 
-        while ( !divs.empty() )
+        // doing powers of 2 first
+        // loop will increment over odds
+        if ( (n&1) == 0 )
         {
-            sum += divs.top();
-            divs.pop();
+            sum = 1;
+            p = 2;
+            while ( (n&1) == 0 )
+            {
+                sum += p;
+                p <<= 1;
+                n >>= 1;
+            }
+            total *= sum;
         }
-        return sum;
+
+        while ( n > 1 )
+        {
+            factor += 2;
+            sum = 1;
+            p = factor;
+            while ( n % factor == 0 )
+            {
+                sum += p;
+                p *= factor;
+                n /= factor;
+            }
+            total *= sum;
+        }
+        return total;
     }
 }
 

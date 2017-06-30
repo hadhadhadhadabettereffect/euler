@@ -2,8 +2,6 @@
 #define PROBLEM_23
 #include "problem.h"
 #include "shared.h"
-#include <vector>
-#include <bitset>
 
 /************************
 A perfect number is a number for which the sum of its proper divisors
@@ -25,36 +23,37 @@ Find the sum of all the positive integers which cannot be written as the sum of 
 
 namespace problem_23 {
 
-    bool is_abundant ( int n )
+    int solve ()
     {
-        return shared::sum_of_divisors(n) > n;
-    }
+        // reserving space based on natural desity
+        // https://projecteuclid.org/euclid.em/1048515661
+        // round_up(28123 * 0.248)
+        int abundant[7000] = { 12 };
+        int count = 1; // # of abundant numbers
+        // true @ index n if n can be written as the sum to two abundant numbers
+        bool summable[28124] = { false };
 
-    unsigned solve ()
-    {
-        std::vector<int> abundant;
-        std::bitset<28124> summable;
+        // marking abundant numbers under 28124
+        for ( int i = 13; i < 28124; ++i )
+            if ( shared::sum_of_factors(i) > (i<<1) )
+                abundant[count++] = i;
 
-        abundant.push_back(12);
-        for ( auto i = 13; i < 28124; ++i )
+        // marking sums of abundant number pairs in summable array
+        for ( int i = 0, s = 0; i < count; ++i )
         {
-            if ( is_abundant(i) ) abundant.push_back(i);
-        }
-
-        for ( unsigned i = 0, cap = abundant.size(); i < cap; ++i )
-        {
-            for ( unsigned j = i; j < cap; ++j )
+            for ( int j = i; j < count; ++j )
             {
-                if ( abundant.at(i) + abundant.at(j) >= 28124 ) break;
-                summable.set( abundant.at(i) + abundant.at(j) );
+                s = abundant[i] + abundant[j];
+                if ( s > 28123 ) break;
+                summable[s] = true;
             }
         }
 
-        unsigned total = 0;
-        for ( unsigned i = 1; i < 28124; ++i )
-        {
-            if ( !summable[i] ) total += i;
-        }
+        // adding up indexes where summable[index] == false
+        int total = 0;
+        for( int i = 1; i < 28124; ++i )
+            if( !summable[i] ) total += i;
+
         return total;
     }
 

@@ -23,9 +23,9 @@ namespace problem_21 {
         auto total = 0;
         for ( auto a = 2, b = 0; a < 10000; ++a )
         {
-            b = shared::sum_of_divisors(a);
+            b = shared::sum_of_factors(a) - a;
             // if a > b then the pair was already recorded
-            if ( a < b && shared::sum_of_divisors(b) == a ) total += a + b;
+            if ( a < b && shared::sum_of_factors(b) == a + b ) total += a + b;
         }
         return total;
     }
